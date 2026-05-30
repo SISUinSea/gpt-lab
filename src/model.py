@@ -48,9 +48,10 @@ class FeedForward(nn.Module):
         super().__init__()
         # TODO: d_model -> mult*d_model -> d_model 구조의 작은 MLP를 정의하세요.
         self.layers = nn.Sequential(
-            nn.Linear(d_model, 4 * d_model),
+            nn.Linear(d_model, mult * d_model),
             GELU(),
-            nn.Linear(4 * d_model, d_model)
+            nn.Linear(mult * d_model, d_model),
+            nn.Dropout(dropout)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
