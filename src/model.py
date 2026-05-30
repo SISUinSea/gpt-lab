@@ -74,11 +74,26 @@ class TransformerBlock(nn.Module):
     ):
         super().__init__()
         # TODO: attention, ffn, layernorm, dropout을 정의하세요.
-        raise NotImplementedError("TransformerBlock.__init__을 구현하세요.")
+        self.attn = MultiHeadAttention(d_model=d_model, n_heads=n_heads, drop_rate=drop_rate,qkv_bias=qkv_bias)
+        self.ffn = FeedForward(d_model=d_model, dropout=drop_rate)
+        self.layernorm1 = LayerNorm(normalized_shape=d_model)
+        self.layernorm2 = LayerNorm(normalized_shape=d_model)
+        self.dropout = nn.Dropout(drop_rate)
 
     def forward(self, x: torch.Tensor, causal_mask: bool = True) -> torch.Tensor:
         """TODO: attention과 ffn을 residual connection으로 연결합니다."""
-        raise NotImplementedError("TransformerBlock.forward를 구현하세요.")
+        shortcut = x
+        x = self.layernorm1(x)
+        x, y = self.attn(x, causal_mask)  # TODO. 이게 왜 이렇게 하니까 되는거지?? 애초에 tuple로 받는거를 기본을 false로 해놓았는데?
+        x = self.dropout(x)
+        x = x + shortcut
+
+        shortcut = x
+        x = self.layernorm2(x)
+        x = self.ffn(x)
+        x = self.dropout(x)
+        
+        return x
 
 
 class GPTModel(nn.Module):
