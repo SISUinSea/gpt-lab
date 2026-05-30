@@ -23,8 +23,9 @@ class GPTDataset(Dataset):
         self.token_ids = token_ids
         self.context_length = context_length
         self.stride = stride if stride is not None else context_length
-        self._length = ((len(self.token_ids) - self.context_length + self.stride) // self.stride)
-        
+        # self._length = ((len(self.token_ids) - self.context_length + self.stride) // self.stride)
+        self._length = 0
+
         self.input_ids = []
         self.target_ids = []
 
@@ -33,7 +34,7 @@ class GPTDataset(Dataset):
             target_chunck = token_ids[i + 1: i + self.context_length + 1]
             self.input_ids.append(torch.tensor(input_chunk))
             self.target_ids.append(torch.tensor(target_chunck))
-        
+            self._length += 1
 
     def __len__(self) -> int:
         return len(self.input_ids)
