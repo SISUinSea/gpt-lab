@@ -95,7 +95,13 @@ class MultiHeadAttention(nn.Module):
         # out_projection을 통과시켜 값들을 합친다.
         context_vector = self.out_proj(context_vector)
 
-        return context_vector, attention_weights if return_attention_weights else context_vector
+        # if return_attention_weights:
+        #     return context_vector, attention_weights
+        # else:
+        #     return context_vector
+        # value = (context_vector, attention_weights) if return_attention_weights else context_vector 
+
+        return (context_vector, attention_weights) if return_attention_weights else context_vector 
 
         
 

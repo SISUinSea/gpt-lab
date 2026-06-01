@@ -84,7 +84,7 @@ class TransformerBlock(nn.Module):
         """TODO: attention과 ffn을 residual connection으로 연결합니다."""
         shortcut = x
         x = self.layernorm1(x)
-        x, y = self.attn(x, causal_mask)  # TODO. 이게 왜 이렇게 하니까 되는거지?? 애초에 tuple로 받는거를 기본을 false로 해놓았는데?
+        x = self.attn(x, causal_mask)  # TODO. 이게 왜 이렇게 하니까 되는거지?? 애초에 tuple로 받는거를 기본을 false로 해놓았는데?
         x = self.dropout(x)
         x = x + shortcut
 
