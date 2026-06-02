@@ -173,3 +173,7 @@ class TestGenerateTextSimple:
         except NotImplementedError:
             pytest.fail("generate_text_simple 미구현")
         assert out.shape == (batch_size, start_len + 6)
+        
+        
+        
+        

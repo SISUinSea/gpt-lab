@@ -119,9 +119,14 @@ class TestBPETrain:
     def test_train_increases_vocab(self):
         """train()이 소량 한국어 코퍼스에서 vocab을 초기 byte 토큰 이상으로 구성하는지 확인한다."""
         tok = BPETokenizer(vocab_size=300)
+        print("여기에요!!")
+        print(len(tok.id_to_token))
         try:
             tok.train("이 영화는 정말 좋았다. 이 영화는 다시 보고 싶다.")
+            print(len(tok.id_to_token))
+
             assert len(tok.id_to_token) >= BYTE_OFFSET + NUM_BYTES
             assert len(tok.id_to_token) <= 300
+            # assert 1 == 0
         except NotImplementedError:
             pytest.fail("train 미구현")
