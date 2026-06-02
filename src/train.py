@@ -79,6 +79,7 @@ def load_checkpoint(
     """TODO: torch.load로 checkpoint를 읽어 model/optimizer 상태를 복원합니다."""
     checkpoint = torch.load(path, map_location=device)  # TODO. map_location이 뭐지??
     model.load_state_dict(checkpoint["model_state_dict"])
+    optimizer = torch.optim.AdamW(model.parameters(), lr=5e-4, weight_decay=0.1)
     optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
     epoch, step = checkpoint["epoch"], checkpoint["global_step"]
     model.train()
