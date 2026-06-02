@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Multi-Head Self-Attention 과제 템플릿."""
 
+from __future__ import annotations
+
 import torch
 import torch.nn as nn
 
@@ -63,8 +65,8 @@ class MultiHeadAttention(nn.Module):
 
         # kvq를 (batch, tokens, head num , head dim)으로 해석하는 텐서로 만든다.
         keys = keys.view(b, seq_len, self.n_heads, self.head_dim)
-        values = keys.view(b, seq_len, self.n_heads, self.head_dim)
-        queries = keys.view(b, seq_len, self.n_heads, self.head_dim)
+        values = values.view(b, seq_len, self.n_heads, self.head_dim)
+        queries = queries.view(b, seq_len, self.n_heads, self.head_dim)
 
         # kvq를 (batch, head num, tokens, head dim)으로 transpose 한다.
         keys = keys.transpose(1, 2)
@@ -76,7 +78,10 @@ class MultiHeadAttention(nn.Module):
 
         # causal mask를 적용한다(causal_mask가 true인 경우에만 적용)
         if causal_mask:
-            mask = torch.triu(torch.ones(seq_len, seq_len), diagonal=1)
+            mask = torch.triu(
+                torch.ones(seq_len, seq_len, device=x.device, dtype=torch.bool),
+                diagonal=1,
+            )
             attention_scores = attention_scores.masked_fill(mask.bool(), -torch.inf)
 
 
@@ -104,4 +109,3 @@ class MultiHeadAttention(nn.Module):
         return (context_vector, attention_weights) if return_attention_weights else context_vector 
 
         
-
